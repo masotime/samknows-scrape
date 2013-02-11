@@ -44,7 +44,8 @@ function getReports(uri, callback) {
 				var link = $(samknowsLinks[0]).attr('href');
 				links.push({
 					"username": username,
-					"link": link
+					"link": link,
+					"origin": uri+'#'+$(this).attr('id')
 				});
 			}
 		});
@@ -77,6 +78,7 @@ function firstTdText($element, $) {
 function getStatistics(linkObj, callback) {
 	var uri = linkObj.uri;
 	var username = linkObj.username;
+	var origin = linkObj.origin;
 
 	fetch(uri, function($) {
 		// syntax will be
@@ -96,6 +98,7 @@ function getStatistics(linkObj, callback) {
 			"startDate": startDate,
 			"endDate": endDate,
 			"isp": isp,
+			"origin": origin,
 			"stats": []
 		};
 
@@ -181,7 +184,8 @@ steps.push(function(data, callback) {
 				if (!(linkData.link in reportLinks)) {
 					reportLinks[linkData.link] = {
 						"uri": linkData.link,
-						"username": linkData.username
+						"username": linkData.username,
+						"origin": linkData.origin
 					};
 				}
 			}
