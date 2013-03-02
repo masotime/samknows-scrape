@@ -108,10 +108,18 @@ function getStatistics(linkObj, callback) {
 		$('table[width="680"]').each(function() {
 
 			$table = $(this);
+
 			var category = $table.find('h2').text();
 
 			// retrieve the 3 different aggregates
-			var amountTxt = _.trim($table.find('td[width="280"] div:nth-child(1)').text());
+			var $aggregates = $table.find('td[width="280"] div:nth-child(1)')
+			if ($aggregates.length === 0) {
+				// note: We do not proceed if there is no matching div.  i.e. we've been snooked by samknows
+				console.log('Samknows decided to snook us by giving us a fake table to scrape.');
+				return;
+			}
+
+			var amountTxt = _.trim($aggregates.text());
 			var amount = rExec(REPORT_MEASURE_REGEX, amountTxt)[1];
 			var metric = rExec(REPORT_MEASURE_REGEX, amountTxt)[2];
 
